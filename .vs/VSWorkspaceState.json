@@ -1,0 +1,13 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\\uD83C\uDFAF services",
+    "\\\uD83D\uDC33 infrastructure",
+    "\\\uD83D\uDC33 infrastructure\\docker",
+    "\\\uD83D\uDC33 infrastructure\\kubernetes",
+    "\\\uD83D\uDCF1 apps",
+    "\\\uD83D\uDD27 packages"
+  ],
+  "SelectedNode": "\\8.1 One-Command Deployment.sh",
+  "PreviewInSolutionExplorer": false
+}

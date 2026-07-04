@@ -1,0 +1,53 @@
+# Luminall PropertyInsight - Docker Ignore
+# Files and directories to ignore during Docker build
+
+node_modules
+.DS_Store
+*.md
+*.log
+*.env
+*.env.local
+*.env.development
+*.env.test
+
+# IDE files
+.idea
+.vscode
+*.sublime-workspace
+*.sublime-project
+
+# Build artifacts
+.next
+out
+build
+
+# Test files
+tests
+__tests__
+*.test.*
+*.spec.*
+
+# Coverage
+coverage
+
+# Logs
+logs
+*.log
+
+# Debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Local history
+.history
+
+# Cache
+.cache
+*.cache
+
+# Misc
+.DS_Store
+**.swp
+**.swo
+**.swn

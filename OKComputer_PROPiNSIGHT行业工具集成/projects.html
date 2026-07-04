@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luminall PropertyInsight - Project Management</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.4.3/echarts.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .gradient-bg { background: linear-gradient(135deg, #1e293b 0%, #374151 50%, #6b7280 100%); }
+        .copper-accent { color: #b45309; }
+        .copper-bg { background-color: #b45309; }
+        .slate-blue { color: #1e293b; }
+        .sage-green { color: #6b7280; }
+        .card-hover { transition: all 0.3s ease; }
+        .card-hover:hover { transform: translateY(-4px); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); }
+        .kanban-column { min-height: 600px; }
+        .job-card { cursor: grab; transition: all 0.3s ease; }
+        .job-card:active { cursor: grabbing; }
+        .job-card.dragging { opacity: 0.5; transform: rotate(5deg); }
+        .drop-zone { border: 2px dashed #d1d5db; transition: all 0.3s ease; }
+        .drop-zone.drag-over { border-color: #b45309; background-color: #fef3c7; }
+        .progress-bar { transition: width 0.5s ease; }
+        .animate-fade-in { opacity: 0; transform: translateY(20px); }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg fixed w-full top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <img src="resources/logo.png" alt="Luminall PropertyInsight" class="h-10 w-auto">
+                    <span class="ml-3 text-xl font-bold slate-blue">Luminall PropertyInsight</span>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="index.html" class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium transition-colors">Dashboard</a>
+                        <a href="projects.html" class="copper-bg text-white px-3 py-2 rounded-md text-sm font-medium">Projects</a>
+                        <a href="customers.html" class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium transition-colors">Customers</a>
+                        <a href="analytics.html" class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium transition-colors">Analytics</a>
+                        <a href="annuity-analytics.html" class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium transition-colors">Annuity Analytics</a>
+                    </div>
+                </div>
+                <div class="flex items-center">
+                    <div class="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
+                        <span class="text-sm font-medium text-gray-700">JD</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="pt-16 relative overflow-hidden">
+        <div class="absolute inset-0">
+            <img src="resources/project-crew.jpg" alt="Professional Roofing Crew" class="w-full h-48 object-cover">
+            <div class="absolute inset-0 bg-gradient-to-r from-slate-900/80 to-slate-900/60"></div>
+        </div>
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="text-left">
+                <h1 class="text-3xl md:text-4xl font-bold text-white mb-2 animate-fade-in">Project Management Hub</h1>
+                <p class="text-lg text-gray-200 max-w-2xl animate-fade-in" style="animation-delay: 0.2s;">
+                    Track every job from lead to completion with intelligent workflow automation
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Project Overview Stats -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <div class="bg-white rounded-lg shadow-lg p-6 card-hover">
+                <div class="flex items-center">
+                    <div class="p-2 bg-blue-100 rounded-lg">
+                        <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+                        </svg>
+                    </div>
+                    <div class="ml-4">
+                        <div class="text-2xl font-bold slate-blue">47</div>
+                        <div class="text-sm text-gray-600">Active Jobs</div>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white rounded-lg shadow-lg p-6 card-hover">
+                <div class="flex items-center">
+                    <div class="p-2 bg-green-100 rounded-lg">
+                        <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <div class="ml-4">
+                        <div class="text-2xl font-bold slate-blue">23</div>
+                        <div class="text-sm text-gray-600">Completed This Month</div>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white rounded-lg shadow-lg p-6 card-hover">
+                <div class="flex items-center">
+                    <div class="p-2 bg-yellow-100 rounded-lg">
+                        <svg class="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <div class="ml-4">
+                        <div class="text-2xl font-bold slate-blue">6.2</div>
+                        <div class="text-sm text-gray-600">Avg Days to Complete</div>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white rounded-lg shadow-lg p-6 card-hover">
+                <div class="flex items-center">
+                    <div class="p-2 bg-purple-100 rounded-lg">
+                        <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
+                        </svg>
+                    </div>
+                    <div class="ml-4">
+                        <div class="text-2xl font-bold slate-blue">$1.8M</div>
+                        <div class="text-sm text-gray-600">Monthly Revenue</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Kanban Board -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-xl font-semibold slate-blue">Project Pipeline</h2>
+                <div class="flex space-x-2">
+                    <button class="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition-colors text-sm">Filter</button>
+                    <button class="px-4 py-2 copper-bg text-white rounded-lg hover:bg-yellow-700 transition-colors text-sm">+ New Job</button>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <!-- Leads Column -->
+                <div class="kanban-column">
+                    <div class="bg-gray-100 rounded-lg p-4 mb-4">
+                        <h3 class="font-semibold text-gray-700 flex items-center justify-between">
+                            <span>Leads</span>
+                            <span class="bg-gray-300 text-gray-700 px-2 py-1 rounded-full text-xs">18</span>
+                        </h3>
+                    </div>
+                    <div class="drop-zone rounded-lg p-2 min-h-96" data-column="leads">
+                        <div class="job-card bg-white rounded-lg p-4 mb-3 shadow-sm border-l-4 border-blue-500" draggable="true" data-job="job1">
+                            <div class="flex justify-between items-start mb-2">
+                                <h4 class="font-medium text-sm">1247 Oak Ridge Dr</h4>
+                                <span class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">New Lead</span>
+                            </div>
+                            <p class="text-xs text-gray-600 mb-2">Hail damage from storm 2 days ago</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-xs font-semibold copper-accent">$15,400</span>
+                                <span class="text-xs text-gray-500">Score: 98</span>
+                            </div>
+                            <div class="mt-2 flex items-center text-xs text-gray-500">
+                                <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.414-1.414L11 9.586V6z" clip-rule="evenodd" />
+                                </svg>
+                                2 hours ago
+                            </div>
+                        </div>
+
+                        <div class="job-card bg-white rounded-lg p-4 mb-3 shadow-sm border-l-4 border-blue-500" draggable="true" data-job="job2">
+                            <div class="flex justify-between items-start mb-2">
+                                <h4 class="font-medium text-sm">3856 Maple Ave</h4>
+                                <span class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">New Lead</span>
+                            </div>
+                            <p class="text-xs text-gray-600 mb-2">Wind damage, missing shingles</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-xs font-semibold copper-accent">$12,800</span>
+                                <span class="text-xs text-gray-500">Score: 96</span>
+                            </div>
+                            <div class="mt-2 flex items-center text-xs text-gray-500">
+                                <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.414-1.414L11 9.586V6z" clip-rule="evenodd" />
+                                </svg>
+                                4 hours ago
+                            </div>
+                        </div>
+
+                        <div class="job-card bg-white rounded-lg p-4 mb-3 shadow-sm border-l-4 border-blue-500" draggable="true" data-job="job3">
+                            <div class="flex justify-between items-start mb-2">
+                                <h4 class="font-medium text-sm">2109 Pine Street</h4>
+                                <span class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">Follow-up</span>
+                            </div>
+                            <p class="text-xs text-gray-600 mb-2">Initial inspection completed</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-xs font-semibold copper-accent">$9,200</span>
+                                <span class="text-xs text-gray-500">Score: 87</span>
+                            </div>
+                            <div class="mt-2 flex items-center text-xs text-gray-500">
+                                <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.414-1.414L11 9.586V6z" clip-rule="evenodd" />
+                                </svg>
+                                1 day ago
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Inspection Column -->
+                <div class="kanban-column">
+                    <div class="bg-yellow-100 rounded-lg p-4 mb-4">
+                        <h3 class="font-semibold text-yellow-800 flex items-center justify-between">
+                            <span>Inspection</span>
+                            <span class="bg-yellow-300 text-yellow-800 px-2 py-1 rounded-full text-xs">12</span>
+                        </h3>
+                    </div>
+                    <div class="drop-zone rounded-lg p-2 min-h-96" data-column="inspection">
+                        <div class="job-card bg-white rounded-lg p-4 mb-3 shadow-sm border-l-4 border-yellow-500" draggable="true" data-job="job4">
+                            <div class="flex justify-between items-start mb-2">
+                                <h4 class="font-medium text-sm">4567 Elm Drive</h4>
+                                <span class="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded">Inspection Scheduled</span>
+                            </div>
+                            <p class="text-xs text-gray-600 mb-2">Scheduled for tomorrow 2:00 PM</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-xs font-semibold copper-accent">$18,600</span>
+                                <span class="text-xs text-gray-500">Score: 92</span>
+                            </div>
+                            <div class="mt-2 flex items-center text-xs text-gray-500">
+                                <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd" />
+                                </svg>
+                                Tomorrow 2:00 PM
+                            </div>
+                        </div>
+
+                        <div class="job-card bg-white rounded-lg p-4 mb-3 shadow-sm border-l-4 border-yellow-500" draggable="true" data-job="job5">
+                            <div class="flex justify-between items-start mb-2">
+                                <h4 class="font-medium text-sm">6789 Cedar Lane</h4>
+                                <span class="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded">Awaiting Customer</span>
+                            </div>
+                            <p class="text-xs text-gray-600 mb-2">Customer requested evening appointment</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-xs font-semibold copper-accent">$11,400</span>
+                                <span class="text-xs text-gray-500">Score: 78</span>
+                            </div>
+                            <div class="mt-2 flex items-center text-xs text-gray-500">
+                                <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+                                </svg>
+                                Needs scheduling
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- In Progress Column -->
+                <div class="kanban-column">
+                    <div class="bg-blue-100 rounded-lg p-4 mb-4">
+                        <h3 class="font-semibold text-blue-800 flex items-center justify-between">
+                            <span>In Progress</span>
+                            <span class="bg-blue-300 text-blue-800 px-2 py-1 rounded-full text-xs">8</span>
+                        </h3>
+                    </div>
+                    <div class="drop-zone rounded-lg p-2 min-h-96" data-column="progress">
+                        <div class="job-card bg-white rounded-lg p-4 mb-3 shadow-sm border-l-4 border-blue-500" draggable="true" data-job="job6">
+                            <div class="flex justify-between items-start mb-2">
+                                <h4 class="font-medium text-sm">3210 Birch Street</h4>
+                                <span class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">Day 2 of 3</span>
+                            </div>
+                            <p class="text-xs text-gray-600 mb-2">Roof replacement in progress</p>
+                            <div class="mb-2">
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div class="bg-blue-600 h-2 rounded-full progress-bar" style="width: 67%"></div>
+                                </div>
+                                <span class="text-xs text-gray-500">67% Complete</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-xs font-semibold copper-accent">$22,100</span>
+                                <span class="text-xs text-gray-500">Score: 94</span>
+                            </div>
+                            <div class="mt-2 flex items-center text-xs text-gray-500">
+                                <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.414-1.414L11 9.586V6z" clip-rule="evenodd" />
+                                </svg>
+                                2 days remaining
+                            </div>
+                        </div>
+
+                        <div class="job-card bg-white rounded-lg p-4 mb-3 shadow-sm border-l-4 border-blue-500" draggable="true" data-job="job7">
+                            <div class="flex justify-between items-start mb-2">
+                                <h4 class="font-medium text-sm">8765 Oak Avenue</h4>
+                                <span class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">Final Day</span>
+                            </div>
+                            <p class="text-xs text-gray-600 mb-2">Cleanup and final inspection</p>
+                            <div class="mb-2">
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div class="bg-green-600 h-2 rounded-full progress-bar" style="width: 95%"></div>
+                                </div>
+                                <span class="text-xs text-gray-500">95% Complete</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-xs font-semibold copper-accent">$16,800</span>
+                                <span class="text-xs text-gray-500">Score: 83</span>
+                            </div>
+                            <div class="mt-2 flex items-center text-xs text-gray-500">
+                                <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.414-1.414L11 9.586V6z" clip-rule="evenodd" />
+                                </svg>
+                                Completion today
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Completed Column -->
+                <div class="kanban-column">
+                    <div class="bg-green-100 rounded-lg p-4 mb-4">
+                        <h3 class="font-semibold text-green-800 flex items-center justify-between">
+                            <span>Completed</span>
+                            <span class="bg-green-300 text-green-800 px-2 py-1 rounded-full text-xs">9</span>
+                        </h3>
+                    </div>
+                    <div class="drop-zone rounded-lg p-2 min-h-96" data-column="completed">
+                        <div class="job-card bg-white rounded-lg p-4 mb-3 shadow-sm border-l-4 border-green-500" draggable="true" data-job="job8">
+                            <div class="flex justify-between items-start mb-2">
+                                <h4 class="font-medium text-sm">5432 Maple Drive</h4>
+                                <span class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">Completed</span>
+                            </div>
+                            <p class="text-xs text-gray-600 mb-2">Full roof replacement finished</p>
+                            <div class="mb-2">
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div class="bg-green-600 h-2 rounded-full progress-bar" style="width: 100%"></div>
+                                </div>
+                                <span class="text-xs text-gray-500">Completed 2 days ago</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-xs font-semibold copper-accent">$19,400</span>
+                                <span class="text-xs text-gray-500">Score: 91</span>
+                            </div>
+                            <div class="mt-2 flex items-center text-xs text-gray-500">
+                                <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd" />
+                                </svg>
+                                Completed 2 days ago
+                            </div>
+                        </div>
+
+                        <div class="job-card bg-white rounded-lg p-4 mb-3 shadow-sm border-l-4 border-green-500" draggable="true" data-job="job9">
+                            <div class="flex justify-between items-start mb-2">
+                                <h4 class="font-medium text-sm">9876 Pine Lane</h4>
+                                <span class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">Completed</span>
+                            </div>
+                            <p class="text-xs text-gray-600 mb-2">Repair and maintenance work</p>
+                            <div class="mb-2">
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div class="bg-green-600 h-2 rounded-full progress-bar" style="width: 100%"></div>
+                                </div>
+                                <span class="text-xs text-gray-500">Completed 5 days ago</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-xs font-semibold copper-accent">$8,900</span>
+                                <span class="text-xs text-gray-500">Score: 86</span>
+                            </div>
+                            <div class="mt-2 flex items-center text-xs text-gray-500">
+                                <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd" />
+                                </svg>
+                                Completed 5 days ago
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Resource Scheduler -->
+        <div class="bg-white rounded-lg shadow-lg p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-xl font-semibold slate-blue">Crew Schedule</h2>
+                <div class="flex space-x-2">
+                    <button class="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition-colors text-sm">Week View</button>
+                    <button class="px-4 py-2 copper-bg text-white rounded-lg hover:bg-yellow-700 transition-colors text-sm">Month View</button>
+                </div>
+            </div>
+            <div id="crewSchedule" style="height: 400px;"></div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8 mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <p class="text-sm">&copy; 2024 Luminall PropertyInsight. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Project Management JavaScript
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeProjectAnimations();
+            initializeKanbanBoard();
+            initializeCrewSchedule();
+        });
+
+        function initializeProjectAnimations() {
+            anime({
+                targets: '.animate-fade-in',
+                opacity: [0, 1],
+                translateY: [20, 0],
+                duration: 800,
+                delay: anime.stagger(100),
+                easing: 'easeOutQuart'
+            });
+
+            // Card hover animations
+            const cards = document.querySelectorAll('.card-hover');
+            cards.forEach(card => {
+                card.addEventListener('mouseenter', () => {
+                    anime({
+                        targets: card,
+                        scale: [1, 1.02],
+                        duration: 300,
+                        easing: 'easeOutQuart'
+                    });
+                });
+
+                card.addEventListener('mouseleave', () => {
+                    anime({
+                        targets: card,
+                        scale: [1.02, 1],
+                        duration: 300,
+                        easing: 'easeOutQuart'
+                    });
+                });
+            });
+        }
+
+        function initializeKanbanBoard() {
+            const jobCards = document.querySelectorAll('.job-card');
+            const dropZones = document.querySelectorAll('.drop-zone');
+
+            jobCards.forEach(card => {
+                card.addEventListener('dragstart', function(e) {
+                    this.classList.add('dragging');
+                    e.dataTransfer.setData('text/plain', this.dataset.job);
+                });
+
+                card.addEventListener('dragend', function() {
+                    this.classList.remove('dragging');
+                });
+            });
+
+            dropZones.forEach(zone => {
+                zone.addEventListener('dragover', function(e) {
+                    e.preventDefault();
+                    this.classList.add('drag-over');
+                });
+
+                zone.addEventListener('dragleave', function() {
+                    this.classList.remove('drag-over');
+                });
+
+                zone.addEventListener('drop', function(e) {
+                    e.preventDefault();
+                    this.classList.remove('drag-over');
+                    
+                    const jobId = e.dataTransfer.getData('text/plain');
+                    const jobCard = document.querySelector(`[data-job="${jobId}"]`);
+                    
+                    if (jobCard) {
+                        this.appendChild(jobCard);
+                        
+                        // Update job status based on column
+                        const column = this.dataset.column;
+                        updateJobStatus(jobId, column);
+                        
+                        // Show notification
+                        showNotification(`Job moved to ${column}`, 'success');
+                    }
+                });
+            });
+        }
+
+        function updateJobStatus(jobId, column) {
+            const jobCard = document.querySelector(`[data-job="${jobId}"]`);
+            const statusBadge = jobCard.querySelector('.px-2');
+            
+            switch(column) {
+                case 'leads':
+                    statusBadge.className = 'text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded';
+                    statusBadge.textContent = 'New Lead';
+                    break;
+                case 'inspection':
+                    statusBadge.className = 'text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded';
+                    statusBadge.textContent = 'Inspection Scheduled';
+                    break;
+                case 'progress':
+                    statusBadge.className = 'text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded';
+                    statusBadge.textContent = 'In Progress';
+                    break;
+                case 'completed':
+                    statusBadge.className = 'text-xs bg-green-100 text-green-800 px-2 py-1 rounded';
+                    statusBadge.textContent = 'Completed';
+                    break;
+            }
+        }
+
+        function initializeCrewSchedule() {
+            const chartDom = document.getElementById('crewSchedule');
+            const myChart = echarts.init(chartDom);
+
+            const option = {
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {
+                        type: 'shadow'
+                    }
+                },
+                legend: {
+                    data: ['Crew A', 'Crew B', 'Crew C']
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+                },
+                xAxis: {
+                    type: 'category',
+                    data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+                },
+                yAxis: {
+                    type: 'value',
+                    name: 'Jobs'
+                },
+                series: [
+                    {
+                        name: 'Crew A',
+                        type: 'bar',
+                        stack: 'total',
+                        data: [3, 4, 2, 5, 3, 2, 1],
+                        itemStyle: {
+                            color: '#b45309'
+                        }
+                    },
+                    {
+                        name: 'Crew B',
+                        type: 'bar',
+                        stack: 'total',
+                        data: [2, 3, 4, 2, 4, 3, 2],
+                        itemStyle: {
+                            color: '#1e293b'
+                        }
+                    },
+                    {
+                        name: 'Crew C',
+                        type: 'bar',
+                        stack: 'total',
+                        data: [1, 2, 3, 3, 2, 1, 1],
+                        itemStyle: {
+                            color: '#6b7280'
+                        }
+                    }
+                ]
+            };
+
+            myChart.setOption(option);
+
+            window.addEventListener('resize', function() {
+                myChart.resize();
+            });
+        }
+
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `fixed top-20 right-4 z-50 p-4 rounded-lg shadow-lg max-w-sm transition-all duration-300 transform translate-x-full`;
+            
+            const colors = {
+                success: 'bg-green-500 text-white',
+                info: 'bg-blue-500 text-white',
+                warning: 'bg-yellow-500 text-black',
+                error: 'bg-red-500 text-white'
+            };
+            
+            notification.className += ` ${colors[type]}`;
+            notification.innerHTML = `
+                <div class="flex items-center">
+                    <span class="flex-1">${message}</span>
+                    <button class="ml-2 text-white hover:text-gray-200" onclick="this.parentElement.parentElement.remove()">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+                        </svg>
+                    </button>
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.classList.remove('translate-x-full');
+            }, 100);
+            
+            setTimeout(() => {
+                notification.classList.add('translate-x-full');
+                setTimeout(() => notification.remove(), 300);
+            }, 5000);
+        }
+    </script>
+</body>
+</html>

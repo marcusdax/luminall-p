@@ -1,0 +1,24 @@
+{
+    "serverpulse.ai.enabled": true,
+    "serverpulse.ai.optInShown": true,
+    "serverpulse.services": [
+        {
+            "name": "luminall-propertyinsight (docker) (docker)",
+            "type": "docker",
+            "port": 8000,
+            "useDocker": {
+                "pathToDockerFile": {
+                    "$mid": 1,
+                    "fsPath": "c:\\Users\\wylde\\OneDrive\\Apps\\propertyinsightAI\\luminall-propertyinsight\\Dockerfile",
+                    "_sep": 1,
+                    "external": "file:///c%3A/Users/wylde/OneDrive/Apps/propertyinsightAI/luminall-propertyinsight/Dockerfile",
+                    "path": "/c:/Users/wylde/OneDrive/Apps/propertyinsightAI/luminall-propertyinsight/Dockerfile",
+                    "scheme": "file"
+                }
+            },
+            "healthCheckPath": "",
+            "enableHealthCheck": true,
+            "healthCheckInterval": 300000
+        }
+    ]
+}

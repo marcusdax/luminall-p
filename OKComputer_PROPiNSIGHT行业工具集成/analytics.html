@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luminall PropertyInsight - Financial Analytics</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.4.3/echarts.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .gradient-bg { background: linear-gradient(135deg, #1e293b 0%, #374151 50%, #6b7280 100%); }
+        .copper-accent { color: #b45309; }
+        .copper-bg { background-color: #b45309; }
+        .slate-blue { color: #1e293b; }
+        .sage-green { color: #6b7280; }
+        .card-hover { transition: all 0.3s ease; }
+        .card-hover:hover { transform: translateY(-4px); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); }
+        .animate-fade-in { opacity: 0; transform: translateY(20px); }
+        .metric-card { background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%); }
+        .chart-container { height: 400px; }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg fixed w-full top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <img src="resources/logo.png" alt="Luminall PropertyInsight" class="h-10 w-auto">
+                    <span class="ml-3 text-xl font-bold slate-blue">Luminall PropertyInsight</span>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="index.html" class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium transition-colors">Dashboard</a>
+                        <a href="projects.html" class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium transition-colors">Projects</a>
+                        <a href="customers.html" class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium transition-colors">Customers</a>
+                        <a href="analytics.html" class="copper-bg text-white px-3 py-2 rounded-md text-sm font-medium">Analytics</a>
+                        <a href="annuity-analytics.html" class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium transition-colors">Annuity Analytics</a>
+                    </div>
+                </div>
+                <div class="flex items-center">
+                    <div class="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
+                        <span class="text-sm font-medium text-gray-700">JD</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="pt-16 relative overflow-hidden">
+        <div class="absolute inset-0">
+            <img src="resources/analytics-chart.jpg" alt="Analytics Dashboard" class="w-full h-48 object-cover">
+            <div class="absolute inset-0 bg-gradient-to-r from-slate-900/80 to-slate-900/60"></div>
+        </div>
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="text-left">
+                <h1 class="text-3xl md:text-4xl font-bold text-white mb-2 animate-fade-in">Financial Analytics Center</h1>
+                <p class="text-lg text-gray-200 max-w-2xl animate-fade-in" style="animation-delay: 0.2s;">
+                    Data-driven insights to optimize your roofing business performance and profitability
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Key Performance Indicators -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <div class="metric-card rounded-lg shadow-lg p-6 card-hover">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-gray-600">Total Revenue</p>
+                        <p class="text-2xl font-bold slate-blue">$2.4M</p>
+                        <p class="text-sm text-green-600">+12.5% from last month</p>
+                    </div>
+                    <div class="p-3 bg-green-100 rounded-full">
+                        <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <div class="metric-card rounded-lg shadow-lg p-6 card-hover">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-gray-600">Profit Margin</p>
+                        <p class="text-2xl font-bold slate-blue">34.2%</p>
+                        <p class="text-sm text-green-600">+2.1% from last month</p>
+                    </div>
+                    <div class="p-3 bg-blue-100 rounded-full">
+                        <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <div class="metric-card rounded-lg shadow-lg p-6 card-hover">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-gray-600">Avg Job Value</p>
+                        <p class="text-2xl font-bold slate-blue">$18,450</p>
+                        <p class="text-sm text-red-600">-3.2% from last month</p>
+                    </div>
+                    <div class="p-3 bg-purple-100 rounded-full">
+                        <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <div class="metric-card rounded-lg shadow-lg p-6 card-hover">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-gray-600">Customer Acquisition</p>
+                        <p class="text-2xl font-bold slate-blue">156</p>
+                        <p class="text-sm text-green-600">+28.7% from last month</p>
+                    </div>
+                    <div class="p-3 bg-yellow-100 rounded-full">
+                        <svg class="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+            <!-- Revenue Forecasting -->
+            <div class="bg-white rounded-lg shadow-lg p-6 card-hover">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-xl font-semibold slate-blue">Revenue Forecasting</h2>
+                    <div class="flex space-x-2">
+                        <button class="px-3 py-1 text-xs bg-gray-200 rounded-full hover:bg-gray-300 transition-colors">6M</button>
+                        <button class="px-3 py-1 text-xs bg-gray-200 rounded-full hover:bg-gray-300 transition-colors">1Y</button>
+                        <button class="px-3 py-1 text-xs copper-bg text-white rounded-full">2Y</button>
+                    </div>
+                </div>
+                <div id="revenueChart" class="chart-container"></div>
+            </div>
+
+            <!-- Profitability Analysis -->
+            <div class="bg-white rounded-lg shadow-lg p-6 card-hover">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-xl font-semibold slate-blue">Profitability by Service Type</h2>
+                    <button class="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition-colors text-sm">Export</button>
+                </div>
+                <div id="profitabilityChart" class="chart-container"></div>
+            </div>
+        </div>
+
+        <!-- Geographic Heat Map -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-8 card-hover">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-xl font-semibold slate-blue">Geographic Performance Heat Map</h2>
+                <div class="flex space-x-2">
+                    <select class="px-3 py-2 border border-gray-300 rounded-lg text-sm">
+                        <option>Revenue</option>
+                        <option>Job Count</option>
+                        <option>Profit Margin</option>
+                        <option>Customer Satisfaction</option>
+                    </select>
+                    <button class="px-4 py-2 copper-bg text-white rounded-lg hover:bg-yellow-700 transition-colors text-sm">Generate Report</button>
+                </div>
+            </div>
+            <div id="geoChart" style="height: 500px;"></div>
+        </div>
+
+        <!-- Performance Scorecards -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+            <!-- Sales Team Performance -->
+            <div class="bg-white rounded-lg shadow-lg p-6 card-hover">
+                <h2 class="text-xl font-semibold slate-blue mb-6">Sales Team Performance</h2>
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                                <span class="text-sm font-medium text-blue-600">MJ</span>
+                            </div>
+                            <div class="ml-3">
+                                <div class="text-sm font-medium text-gray-900">Mike Johnson</div>
+                                <div class="text-xs text-gray-500">Senior Sales Rep</div>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-lg font-bold copper-accent">$485K</div>
+                            <div class="text-xs text-gray-500">28 jobs closed</div>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                                <span class="text-sm font-medium text-green-600">SW</span>
+                            </div>
+                            <div class="ml-3">
+                                <div class="text-sm font-medium text-gray-900">Sarah Williams</div>
+                                <div class="text-xs text-gray-500">Sales Rep</div>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-lg font-bold copper-accent">$392K</div>
+                            <div class="text-xs text-gray-500">22 jobs closed</div>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center">
+                                <span class="text-sm font-medium text-purple-600">DM</span>
+                            </div>
+                            <div class="ml-3">
+                                <div class="text-sm font-medium text-gray-900">David Martinez</div>
+                                <div class="text-xs text-gray-500">Sales Rep</div>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-lg font-bold copper-accent">$356K</div>
+                            <div class="text-xs text-gray-500">19 jobs closed</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cost Analysis -->
+            <div class="bg-white rounded-lg shadow-lg p-6 card-hover">
+                <h2 class="text-xl font-semibold slate-blue mb-6">Cost Breakdown Analysis</h2>
+                <div id="costChart" class="chart-container"></div>
+            </div>
+        </div>
+
+        <!-- Storm Event ROI Analysis -->
+        <div class="bg-white rounded-lg shadow-lg p-6 card-hover">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-xl font-semibold slate-blue">Storm Event ROI Analysis</h2>
+                <div class="flex space-x-2">
+                    <button class="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition-colors text-sm">Filter by Date</button>
+                    <button class="px-4 py-2 copper-bg text-white rounded-lg hover:bg-yellow-700 transition-colors text-sm">Export Data</button>
+                </div>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Storm Event</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Properties</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Leads Generated</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Conversion Rate</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Revenue</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ROI</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm font-medium text-gray-900">Dallas Hail Storm</div>
+                                <div class="text-sm text-gray-500">2.5-inch hail</div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Nov 12, 2024</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">247</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">89</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm text-gray-900">67%</div>
+                                <div class="text-xs text-gray-500">60/89 leads</div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold copper-accent">$1,247,000</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                    2,847%
+                                </span>
+                            </td>
+                        </tr>
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm font-medium text-gray-900">Fort Worth Wind Event</div>
+                                <div class="text-sm text-gray-500">85 mph winds</div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Nov 8, 2024</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">156</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">52</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm text-gray-900">54%</div>
+                                <div class="text-xs text-gray-500">28/52 leads</div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold copper-accent">$642,000</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                    1,456%
+                                </span>
+                            </td>
+                        </tr>
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm font-medium text-gray-900">Plano Storm System</div>
+                                <div class="text-sm text-gray-500">Mixed severe weather</div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Nov 5, 2024</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">198</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">67</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm text-gray-900">43%</div>
+                                <div class="text-xs text-gray-500">29/67 leads</div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold copper-accent">$523,000</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                    1,187%
+                                </span>
+                            </td>
+                        </tr>
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm font-medium text-gray-900">Arlington Hail Event</div>
+                                <div class="text-sm text-gray-500">1.8-inch hail</div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Nov 1, 2024</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">134</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">41</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm text-gray-900">61%</div>
+                                <div class="text-xs text-gray-500">25/41 leads</div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold copper-accent">$445,000</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                    1,012%
+                                </span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8 mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <p class="text-sm">&copy; 2024 Luminall PropertyInsight. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Analytics JavaScript
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeAnalyticsAnimations();
+            initializeRevenueChart();
+            initializeProfitabilityChart();
+            initializeGeoChart();
+            initializeCostChart();
+        });
+
+        function initializeAnalyticsAnimations() {
+            anime({
+                targets: '.animate-fade-in',
+                opacity: [0, 1],
+                translateY: [20, 0],
+                duration: 800,
+                delay: anime.stagger(100),
+                easing: 'easeOutQuart'
+            });
+
+            // Card hover animations
+            const cards = document.querySelectorAll('.card-hover');
+            cards.forEach(card => {
+                card.addEventListener('mouseenter', () => {
+                    anime({
+                        targets: card,
+                        scale: [1, 1.02],
+                        duration: 300,
+                        easing: 'easeOutQuart'
+                    });
+                });
+
+                card.addEventListener('mouseleave', () => {
+                    anime({
+                        targets: card,
+                        scale: [1.02, 1],
+                        duration: 300,
+                        easing: 'easeOutQuart'
+                    });
+                });
+            });
+        }
+
+        function initializeRevenueChart() {
+            const chartDom = document.getElementById('revenueChart');
+            const myChart = echarts.init(chartDom);
+
+            const option = {
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {
+                        type: 'cross',
+                        label: {
+                            backgroundColor: '#6a7985'
+                        }
+                    }
+                },
+                legend: {
+                    data: ['Actual Revenue', 'Projected Revenue', 'Storm Events']
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+                },
+                xAxis: {
+                    type: 'category',
+                    boundaryGap: false,
+                    data: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+                },
+                yAxis: {
+                    type: 'value',
+                    name: 'Revenue ($K)',
+                    axisLabel: {
+                        formatter: '${value}K'
+                    }
+                },
+                series: [
+                    {
+                        name: 'Actual Revenue',
+                        type: 'line',
+                        smooth: true,
+                        lineStyle: {
+                            width: 3,
+                            color: '#b45309'
+                        },
+                        areaStyle: {
+                            color: {
+                                type: 'linear',
+                                x: 0, y: 0, x2: 0, y2: 1,
+                                colorStops: [
+                                    { offset: 0, color: 'rgba(180, 83, 9, 0.3)' },
+                                    { offset: 1, color: 'rgba(180, 83, 9, 0.05)' }
+                                ]
+                            }
+                        },
+                        data: [120, 132, 101, 134, 90, 230, 210, 182, 191, 234, 290, 330]
+                    },
+                    {
+                        name: 'Projected Revenue',
+                        type: 'line',
+                        smooth: true,
+                        lineStyle: {
+                            width: 2,
+                            color: '#1e293b',
+                            type: 'dashed'
+                        },
+                        data: [125, 140, 110, 145, 100, 245, 225, 195, 205, 250, 310, 350]
+                    },
+                    {
+                        name: 'Storm Events',
+                        type: 'bar',
+                        barWidth: '60%',
+                        itemStyle: {
+                            color: 'rgba(220, 38, 38, 0.6)'
+                        },
+                        data: [0, 0, 1, 0, 0, 2, 1, 0, 0, 1, 3, 0]
+                    }
+                ]
+            };
+
+            myChart.setOption(option);
+
+            window.addEventListener('resize', function() {
+                myChart.resize();
+            });
+        }
+
+        function initializeProfitabilityChart() {
+            const chartDom = document.getElementById('profitabilityChart');
+            const myChart = echarts.init(chartDom);
+
+            const option = {
+                tooltip: {
+                    trigger: 'item',
+                    formatter: '{a} <br/>{b}: ${c}K ({d}%)'
+                },
+                legend: {
+                    orient: 'vertical',
+                    left: 'left',
+                    data: ['Roof Replacement', 'Roof Repair', 'Gutter Installation', 'Inspection Services', 'Emergency Services']
+                },
+                series: [
+                    {
+                        name: 'Revenue by Service',
+                        type: 'pie',
+                        radius: ['50%', '70%'],
+                        avoidLabelOverlap: false,
+                        label: {
+                            show: false,
+                            position: 'center'
+                        },
+                        emphasis: {
+                            label: {
+                                show: true,
+                                fontSize: '18',
+                                fontWeight: 'bold'
+                            }
+                        },
+                        labelLine: {
+                            show: false
+                        },
+                        data: [
+                            { value: 1200, name: 'Roof Replacement', itemStyle: { color: '#b45309' } },
+                            { value: 450, name: 'Roof Repair', itemStyle: { color: '#1e293b' } },
+                            { value: 280, name: 'Gutter Installation', itemStyle: { color: '#6b7280' } },
+                            { value: 180, name: 'Inspection Services', itemStyle: { color: '#059669' } },
+                            { value: 320, name: 'Emergency Services', itemStyle: { color: '#dc2626' } }
+                        ]
+                    }
+                ]
+            };
+
+            myChart.setOption(option);
+
+            window.addEventListener('resize', function() {
+                myChart.resize();
+            });
+        }
+
+        function initializeGeoChart() {
+            const chartDom = document.getElementById('geoChart');
+            const myChart = echarts.init(chartDom);
+
+            const data = [
+                { name: 'Dallas', value: 1200 },
+                { name: 'Fort Worth', value: 850 },
+                { name: 'Plano', value: 650 },
+                { name: 'Arlington', value: 520 },
+                { name: 'Irving', value: 480 },
+                { name: 'Garland', value: 420 },
+                { name: 'Grand Prairie', value: 380 },
+                { name: 'McKinney', value: 350 },
+                { name: 'Frisco', value: 320 },
+                { name: 'Richardson', value: 280 }
+            ];
+
+            const option = {
+                tooltip: {
+                    trigger: 'item',
+                    formatter: '{b}: ${c}K'
+                },
+                visualMap: {
+                    min: 0,
+                    max: 1200,
+                    left: 'left',
+                    top: 'bottom',
+                    text: ['High', 'Low'],
+                    calculable: true,
+                    inRange: {
+                        color: ['#f0f0f0', '#b45309']
+                    }
+                },
+                series: [
+                    {
+                        name: 'Revenue by City',
+                        type: 'map',
+                        map: 'USA',
+                        roam: true,
+                        emphasis: {
+                            label: {
+                                show: true
+                            }
+                        },
+                        data: data
+                    }
+                ]
+            };
+
+            // Note: In a real implementation, you would need to load the USA map data
+            // For this demo, we'll create a simplified version
+            myChart.setOption({
+                title: {
+                    text: 'Dallas Metro Area Performance',
+                    left: 'center'
+                },
+                tooltip: {
+                    trigger: 'item'
+                },
+                xAxis: {
+                    type: 'category',
+                    data: data.map(item => item.name)
+                },
+                yAxis: {
+                    type: 'value',
+                    name: 'Revenue ($K)'
+                },
+                series: [{
+                    data: data.map(item => item.value),
+                    type: 'bar',
+                    itemStyle: {
+                        color: function(params) {
+                            const colors = ['#6b7280', '#b45309', '#dc2626'];
+                            return colors[Math.floor(params.value / 400)];
+                        }
+                    }
+                }]
+            });
+
+            window.addEventListener('resize', function() {
+                myChart.resize();
+            });
+        }
+
+        function initializeCostChart() {
+            const chartDom = document.getElementById('costChart');
+            const myChart = echarts.init(chartDom);
+
+            const option = {
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {
+                        type: 'shadow'
+                    }
+                },
+                legend: {
+                    data: ['Materials', 'Labor', 'Overhead', 'Profit']
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+                },
+                xAxis: {
+                    type: 'value',
+                    name: 'Cost ($K)',
+                    axisLabel: {
+                        formatter: '${value}K'
+                    }
+                },
+                yAxis: {
+                    type: 'category',
+                    data: ['Roof Replacement', 'Roof Repair', 'Gutter Install', 'Inspection', 'Emergency']
+                },
+                series: [
+                    {
+                        name: 'Materials',
+                        type: 'bar',
+                        stack: 'total',
+                        itemStyle: { color: '#6b7280' },
+                        data: [45, 18, 12, 3, 8]
+                    },
+                    {
+                        name: 'Labor',
+                        type: 'bar',
+                        stack: 'total',
+                        itemStyle: { color: '#1e293b' },
+                        data: [35, 15, 8, 5, 12]
+                    },
+                    {
+                        name: 'Overhead',
+                        type: 'bar',
+                        stack: 'total',
+                        itemStyle: { color: '#d97706' },
+                        data: [15, 6, 4, 1, 3]
+                    },
+                    {
+                        name: 'Profit',
+                        type: 'bar',
+                        stack: 'total',
+                        itemStyle: { color: '#059669' },
+                        data: [25, 11, 6, 2, 5]
+                    }
+                ]
+            };
+
+            myChart.setOption(option);
+
+            window.addEventListener('resize', function() {
+                myChart.resize();
+            });
+        }
+
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `fixed top-20 right-4 z-50 p-4 rounded-lg shadow-lg max-w-sm transition-all duration-300 transform translate-x-full`;
+            
+            const colors = {
+                success: 'bg-green-500 text-white',
+                info: 'bg-blue-500 text-white',
+                warning: 'bg-yellow-500 text-black',
+                error: 'bg-red-500 text-white'
+            };
+            
+            notification.className += ` ${colors[type]}`;
+            notification.innerHTML = `
+                <div class="flex items-center">
+                    <span class="flex-1">${message}</span>
+                    <button class="ml-2 text-white hover:text-gray-200" onclick="this.parentElement.parentElement.remove()">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+                        </svg>
+                    </button>
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.classList.remove('translate-x-full');
+            }, 100);
+            
+            setTimeout(() => {
+                notification.classList.add('translate-x-full');
+                setTimeout(() => notification.remove(), 300);
+            }, 5000);
+        }
+    </script>
+</body>
+</html>

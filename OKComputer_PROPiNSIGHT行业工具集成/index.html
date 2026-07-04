@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luminall PropertyInsight - Storm Intelligence Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.4.3/echarts.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .gradient-bg { background: linear-gradient(135deg, #1e293b 0%, #374151 50%, #6b7280 100%); }
+        .copper-accent { color: #b45309; }
+        .copper-bg { background-color: #b45309; }
+        .slate-blue { color: #1e293b; }
+        .sage-green { color: #6b7280; }
+        .card-hover { transition: all 0.3s ease; }
+        .card-hover:hover { transform: translateY(-4px); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); }
+        .probability-high { border-left: 4px solid #dc2626; }
+        .probability-medium { border-left: 4px solid #d97706; }
+        .probability-low { border-left: 4px solid #059669; }
+        #stormMap { height: 400px; border-radius: 12px; }
+        .hero-overlay { background: rgba(30, 41, 59, 0.8); }
+        .animate-fade-in { opacity: 0; transform: translateY(20px); }
+        .animate-slide-in { opacity: 0; transform: translateX(-20px); }
+        .storm-alert { animation: pulse 2s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg fixed w-full top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <img src="resources/logo.png" alt="Luminall PropertyInsight" class="h-10 w-auto">
+                    <span class="ml-3 text-xl font-bold slate-blue">Luminall PropertyInsight</span>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="index.html" class="copper-bg text-white px-3 py-2 rounded-md text-sm font-medium">Dashboard</a>
+                        <a href="projects.html" class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium transition-colors">Projects</a>
+                        <a href="customers.html" class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium transition-colors">Customers</a>
+                        <a href="analytics.html" class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium transition-colors">Analytics</a>
+                        <a href="annuity-analytics.html" class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium transition-colors">Annuity Analytics</a>
+                    </div>
+                </div>
+                <div class="flex items-center">
+                    <div class="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
+                        <span class="text-sm font-medium text-gray-700">JD</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="pt-16 relative overflow-hidden">
+        <div class="absolute inset-0">
+            <img src="resources/hero-storm.jpg" alt="Storm Intelligence" class="w-full h-64 object-cover">
+            <div class="hero-overlay absolute inset-0"></div>
+        </div>
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="text-center">
+                <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">
+                    <span class="animate-fade-in">AI-Powered</span> 
+                    <span class="copper-accent animate-fade-in" style="animation-delay: 0.2s;">Storm Intelligence</span>
+                </h1>
+                <p class="text-xl text-gray-200 mb-8 max-w-3xl mx-auto animate-fade-in" style="animation-delay: 0.4s;">
+                    Transform from reactive storm chasing to proactive, data-driven business operations with our Damage Probability Engine™
+                </p>
+                <div class="flex justify-center space-x-4 animate-fade-in" style="animation-delay: 0.6s;">
+                    <div class="bg-white bg-opacity-20 backdrop-blur-sm rounded-lg px-6 py-3">
+                        <div class="text-2xl font-bold text-white">247</div>
+                        <div class="text-sm text-gray-200">Active Properties</div>
+                    </div>
+                    <div class="bg-white bg-opacity-20 backdrop-blur-sm rounded-lg px-6 py-3">
+                        <div class="text-2xl font-bold text-white">89%</div>
+                        <div class="text-sm text-gray-200">Accuracy Rate</div>
+                    </div>
+                    <div class="bg-white bg-opacity-20 backdrop-blur-sm rounded-lg px-6 py-3">
+                        <div class="text-2xl font-bold text-white">$2.4M</div>
+                        <div class="text-sm text-gray-200">Pipeline Value</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Storm Alert Banner -->
+        <div class="bg-red-50 border-l-4 border-red-400 p-4 mb-8 rounded-lg storm-alert">
+            <div class="flex">
+                <div class="flex-shrink-0">
+                    <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                    </svg>
+                </div>
+                <div class="ml-3">
+                    <h3 class="text-sm font-medium text-red-800">Severe Storm Alert - Dallas Metro Area</h3>
+                    <div class="mt-2 text-sm text-red-700">
+                        <p>2.5-inch hail detected 47 minutes ago. 156 properties identified with 95%+ damage probability.</p>
+                    </div>
+                    <div class="mt-3 text-sm">
+                        <a href="#" class="font-medium text-red-800 hover:text-red-700">View Affected Properties →</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Dashboard Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Interactive Storm Map -->
+            <div class="lg:col-span-2">
+                <div class="bg-white rounded-lg shadow-lg p-6 card-hover">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-xl font-semibold slate-blue">Real-Time Storm Map</h2>
+                        <div class="flex space-x-2">
+                            <button class="px-3 py-1 text-xs bg-gray-200 rounded-full hover:bg-gray-300 transition-colors">Hail</button>
+                            <button class="px-3 py-1 text-xs bg-gray-200 rounded-full hover:bg-gray-300 transition-colors">Wind</button>
+                            <button class="px-3 py-1 text-xs copper-bg text-white rounded-full">All</button>
+                        </div>
+                    </div>
+                    <div id="stormMap" class="w-full"></div>
+                    <div class="mt-4 flex items-center justify-between text-sm text-gray-600">
+                        <span>Last updated: 2 minutes ago</span>
+                        <div class="flex items-center space-x-4">
+                            <div class="flex items-center">
+                                <div class="w-3 h-3 bg-red-500 rounded-full mr-1"></div>
+                                <span>High Risk</span>
+                            </div>
+                            <div class="flex items-center">
+                                <div class="w-3 h-3 bg-yellow-500 rounded-full mr-1"></div>
+                                <span>Medium Risk</span>
+                            </div>
+                            <div class="flex items-center">
+                                <div class="w-3 h-3 bg-green-500 rounded-full mr-1"></div>
+                                <span>Low Risk</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Damage Probability Scores -->
+            <div class="space-y-6">
+                <!-- Quick Actions -->
+                <div class="bg-white rounded-lg shadow-lg p-6 card-hover">
+                    <h3 class="text-lg font-semibold slate-blue mb-4">Quick Actions</h3>
+                    <div class="space-y-3">
+                        <button class="w-full bg-red-600 text-white px-4 py-3 rounded-lg hover:bg-red-700 transition-colors text-sm font-medium">
+                            Export 47 High-Risk Leads to CRM
+                        </button>
+                        <button class="w-full copper-bg text-white px-4 py-3 rounded-lg hover:bg-yellow-700 transition-colors text-sm font-medium">
+                            Generate Marketing Campaign
+                        </button>
+                        <button class="w-full bg-gray-600 text-white px-4 py-3 rounded-lg hover:bg-gray-700 transition-colors text-sm font-medium">
+                            Assign to Sales Teams
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Top Properties -->
+                <div class="bg-white rounded-lg shadow-lg p-6 card-hover">
+                    <h3 class="text-lg font-semibold slate-blue mb-4">Highest Probability Properties</h3>
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg probability-high">
+                            <div>
+                                <div class="font-medium text-sm">1247 Oak Ridge Dr</div>
+                                <div class="text-xs text-gray-600">Dallas, TX 75201</div>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-lg font-bold text-red-600">98</div>
+                                <div class="text-xs text-gray-600">Score</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg probability-high">
+                            <div>
+                                <div class="font-medium text-sm">3856 Maple Ave</div>
+                                <div class="text-xs text-gray-600">Dallas, TX 75202</div>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-lg font-bold text-red-600">96</div>
+                                <div class="text-xs text-gray-600">Score</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg probability-medium">
+                            <div>
+                                <div class="font-medium text-sm">2109 Pine Street</div>
+                                <div class="text-xs text-gray-600">Dallas, TX 75203</div>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-lg font-bold text-yellow-600">87</div>
+                                <div class="text-xs text-gray-600">Score</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-4 text-center">
+                        <a href="#" class="text-sm copper-accent hover:underline">View All Properties →</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Activity and Predictions -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8">
+            <!-- Recent Activity Feed -->
+            <div class="bg-white rounded-lg shadow-lg p-6 card-hover">
+                <h3 class="text-lg font-semibold slate-blue mb-4">Recent Activity</h3>
+                <div class="space-y-4">
+                    <div class="flex items-start space-x-3">
+                        <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
+                            <svg class="w-4 h-4 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                            </svg>
+                        </div>
+                        <div class="flex-1">
+                            <p class="text-sm font-medium text-gray-900">Hail damage confirmed at 1247 Oak Ridge Dr</p>
+                            <p class="text-xs text-gray-500">Field rep John Smith • 23 minutes ago</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start space-x-3">
+                        <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
+                            <svg class="w-4 h-4 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                        <div class="flex-1">
+                            <p class="text-sm font-medium text-gray-900">Storm system updated with new radar data</p>
+                            <p class="text-xs text-gray-500">Weather service • 47 minutes ago</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start space-x-3">
+                        <div class="w-8 h-8 bg-yellow-100 rounded-full flex items-center justify-center flex-shrink-0">
+                            <svg class="w-4 h-4 text-yellow-600" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M8 5a1 1 0 100 2h5.586l-1.293 1.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L13.586 5H8zM12 15a1 1 0 100-2H6.414l1.293-1.293a1 1 0 10-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L6.414 15H12z" />
+                            </svg>
+                        </div>
+                        <div class="flex-1">
+                            <p class="text-sm font-medium text-gray-900">47 new leads exported to CRM system</p>
+                            <p class="text-xs text-gray-500">Automated workflow • 1 hour ago</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Predictive Analytics -->
+            <div class="bg-white rounded-lg shadow-lg p-6 card-hover">
+                <h3 class="text-lg font-semibold slate-blue mb-4">Predictive Strike Zones</h3>
+                <div id="predictionChart" style="height: 300px;"></div>
+                <div class="mt-4 text-sm text-gray-600">
+                    <p>Next 12 hours: 73% chance of severe weather in target region. Recommend positioning crews in Fort Worth area.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8 mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <p class="text-sm">&copy; 2024 Luminall PropertyInsight. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="main.js"></script>
+</body>
+</html>
