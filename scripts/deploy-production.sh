@@ -12,8 +12,8 @@ command -v kubectl >/dev/null 2>&1 || { echo "❌ kubectl not found. Please inst
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 
-# Kubernetes manifests directory (note: emoji and space in folder name)
-K8S_DIR="$REPO_ROOT/🐳 infrastructure/kubernetes"
+# Kubernetes manifests directory
+K8S_DIR="$REPO_ROOT/infrastructure/kubernetes"
 
 if [[ ! -d "$K8S_DIR" ]]; then
   echo "❌ Kubernetes directory not found at: $K8S_DIR"
